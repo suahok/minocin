@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="zh-Hans-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content='Just showing how to use "quotation marks" in meta description.' />
+    <title>Hello! webpack</title>
+  </head>
+  <body>
+    <!-- 根元素 -->
+    <div id="app"></div>
+    <!-- 首次进入动画元素 -->
+    <section class="loading-screen">
+      <div class="loading-content">
+        <div class="loading">
+          <div></div>
+          <div></div>
+        </div>
+        <p class="app-name">美叶-优质设计内容推荐平台</p>
+      </div>
+    </section>
+  </body>
+</html>
+<script>
+  window.addEventListener('DOMContentLoaded', function () {
+    const loading = document.querySelector('.loading-screen')
+    const timer = setTimeout(() => {
+      loading?.remove()
+      clearTimeout(timer)
+    })
+  })
+</script>
