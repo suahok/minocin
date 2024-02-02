@@ -1,40 +1,28 @@
-<script setup lang="ts">
-import { reactive } from 'vue'
-
-const themeConfig = reactive({
-  token: {
-    colorPrimary: '#8d4bbb',
-    borderRadius: 4
-  }
-})
-</script>
+<script setup lang="ts"></script>
 
 <template>
-  <a-config-provider :theme="themeConfig">
+  <n-config-provider preflight-style-disabled>
     <router-view #default="{ Component, route }">
       <transition mode="in-out" name="fade">
         <component :is="Component" :key="route.path" />
       </transition>
     </router-view>
-  </a-config-provider>
+  </n-config-provider>
 </template>
 
 <style lang="scss">
 body {
-  margin: 0;
-  overflow: hidden;
-}
-
-div#app {
-  position: relative;
-
-  width: auto;
-  height: 100vh;
-  box-sizing: border-box;
-
   overflow: hidden;
   overflow-y: auto;
+
+  max-height: 100vh;
+  margin: 0;
+  box-sizing: border-box;
   scroll-behavior: smooth;
+}
+
+.n-config-provider {
+  overflow: hidden;
 }
 
 .fade-enter-active,

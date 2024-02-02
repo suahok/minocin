@@ -1,4 +1,5 @@
 import { merge } from 'webpack-merge'
+import { EsbuildPlugin } from 'esbuild-loader'
 import common from './webpack.config'
 
 const config = merge(common, {
@@ -12,6 +13,12 @@ const config = merge(common, {
   optimization: {
     chunkIds: 'named',
     runtimeChunk: { name: 'runtime' },
+    minimizer: [
+      new EsbuildPlugin({
+        target: ['es2015', 'safari12'],
+        css: true
+      })
+    ],
     splitChunks: {
       chunks: 'all',
       cacheGroups: {

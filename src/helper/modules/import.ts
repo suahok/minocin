@@ -1,7 +1,7 @@
 import { defineAsyncComponent } from 'vue'
 
 export function _import(filename: string, root = 'views') {
-  return () => import(/* webpackChunkName: "[request]" */ `@/${root}/${filename}.vue`)
+  return () => import(`@/${root}/${filename}.vue`)
 }
 
 _import.async = function (filename: string, root = 'components') {

@@ -1,15 +1,28 @@
 <script setup lang="ts">
-import { onBeforeUnmount, ref } from 'vue'
-import { _import } from '@/helper'
+import { onMounted, ref, unref } from 'vue'
+import { request } from '@/service/axios'
 
-const timeout = ref()
 const loading = ref(false)
+const images = ref()
 
-onBeforeUnmount(() => {
-  if (timeout.value) {
-    clearTimeout(timeout.value)
-  }
+onMounted(() => {
+  getData()
+  getData()
 })
+
+async function getData() {
+  loading.value = true
+  try {
+    images.value = await request<object[]>({
+      url: '/v2/list',
+      params: { page: 2, limit: 10 }
+    })
+  } catch (reason) {
+    console.error(reason)
+  } finally {
+    loading.value = false
+  }
+}
 
 function handleClick() {
   openLoadng()
@@ -17,41 +30,52 @@ function handleClick() {
 
 function openLoadng() {
   loading.value = true
-  timeout.value = setTimeout(() => {
+  const timeout = setTimeout(() => {
     loading.value = false
-    clearTimeout(timeout.value)
+    clearTimeout(timeout)
   }, 3000)
+}
+
+function handleClickProxy(event: MouseEvent) {
+  const todo = delegate({ event, root: 'ul', selector: 'li', propKey: 'id' })
+  console.log(todo)
+}
+
+type DelegateRaw = { event: MouseEvent; root: string; selector: string; propKey: string }
+function delegate({ event, selector, root, propKey }: DelegateRaw) {
+  let element = event.target as HTMLElement
+  while (!element.matches(selector)) {
+    if (element.matches(root)) {
+      element = null as any
+      break
+    }
+    element = element.parentElement as HTMLElement
+  }
+  if (element) {
+    let value = element.dataset[propKey]
+    const data = value && images.value.find(({ id }) => id === value)
+    if (data) return unref(data)
+  }
 }
 </script>
 
 <template>
   <div class="dashboard">
-    <!-- <Hello title="webpack" /> -->
-    <component :is="_import.async('Hello')" title="webpack" />
-    <p v-loading="loading" class="example">
-      Lorem ipsum dolor sit, amet consectetur adipisicing elit. Facilis dolorum reprehenderit sint consequatur? Labore
-      nesciunt recusandae deserunt facere, quisquam assumenda voluptatem ad libero voluptas totam aspernatur itaque
-      minima odio qui!
-    </p>
-    <a-button type="primary" @click="handleClick">按钮</a-button>
-    <hr />
-    <!-- <Todos /> -->
-    <component :is="_import.async('Todos')" />
+    <Todos :data="images" prop-key="download_url" />
   </div>
 </template>
 
 <style scoped lang="scss">
 .dashboard {
-  overflow: hidden;
   margin: 1rem;
 }
 
-.example {
-  min-height: 10vh;
-  padding: 1rem;
+.user-list {
+  padding-left: 16px;
 
-  color: dimgray;
-  background-color: whitesmoke;
+  .list-item {
+    margin: 12px 0;
+    font-family: 'Roboto';
+  }
 }
 </style>
-@/helper/modules/import

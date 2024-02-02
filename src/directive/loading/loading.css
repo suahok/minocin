@@ -1,8 +1,10 @@
 .loading-screen {
+  cursor: wait;
   display: grid;
-  position: absolute;
+  position: fixed;
   inset: 0;
   background-color: white;
+  z-index: 999;
 }
 
 .loading-screen .loading-content {
@@ -37,20 +39,6 @@
   color: #607d8b;
 }
 
-.loading-wrap {
-  display: grid;
-  position: absolute;
-  inset: 0;
-  border: 1px solid rgba(96, 125, 139, 0.182);
-
-  &::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background-color: rgba(255, 255, 255, 0.879);
-  }
-}
-
 .loading,
 .loading > div {
   position: relative;
@@ -72,11 +60,6 @@
   float: none;
   background-color: currentColor;
   border: 0 solid currentColor;
-}
-
-.loading-wrap .loading {
-  width: 40px;
-  height: 40px;
 }
 
 .loading > div {
